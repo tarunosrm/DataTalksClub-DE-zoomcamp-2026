@@ -1,0 +1,130 @@
+
+Question 1. Understanding Docker images
+Run docker with the python:3.13 image. Use an entrypoint bash to interact with the container.
+
+What's the version of pip in the image?
+>docker run -it --entrypoint bash python:3.13
+Unable to find image 'python:3.13' locally
+3.13: Pulling from library/python
+2ca1bfae7ba8: Pull complete 
+82e18c5e1c15: Pull complete 
+be442a7e0d6f: Pull complete 
+26d823e3848f: Pull complete 
+ca4b54413202: Pull complete 
+b6513238a015: Pull complete 
+9b57076d00d4: Pull complete 
+Digest: sha256:c8b03b4e98b39cfb180a5ea13ae5ee39039a8f75ccf52fe6d5c216eed6e1be1d
+Status: Downloaded newer image for python:3.13
+root@f73032ed6178:/# pip --version
+pip 25.3 from /usr/local/lib/python3.13/site-packages/pip (python 3.13)
+
+
+Question 2. Understanding Docker networking and docker-compose
+Given the following docker-compose.yaml, what is the hostname and port that pgadmin should use to connect to the postgres database?
+
+services:
+  db:
+    container_name: postgres
+    image: postgres:17-alpine
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'ny_taxi'
+    ports:
+      - '5433:5432'
+    volumes:
+      - vol-pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    container_name: pgadmin
+    image: dpage/pgadmin4:latest
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "pgadmin@pgadmin.com"
+      PGADMIN_DEFAULT_PASSWORD: "pgadmin"
+    ports:
+      - "8080:80"
+    volumes:
+      - vol-pgadmin_data:/var/lib/pgadmin
+
+volumes:
+  vol-pgdata:
+    name: vol-pgdata
+  vol-pgadmin_data:
+    name: vol-pgadmin_data
+
+postgres:5433
+localhost:5432
+db:5433
+postgres:5432
+db:5432
+If multiple answers are correct, select any
+Answer:
+postgres:5432 OR
+db:5432
+
+
+Q3:
+download files in docker localhost using wget
+load it into python container /data folder
+>docker run -it -v $(pwd):/data python:3.13 bash	
+
+root@3da1366b7771:/data# python assignment1_q3.py
+Number of short trips (<=1 mile): 8007
+
+Q4:
+root@3da1366b7771:/data# python assignment1_q4.py
+Day with longest trip: 2025-11-14
+Longest trip distance: 88.03
+record with longest trip: VendorID         2
+lpep_pickup_datetime     2025-11-14 15:36:27
+lpep_dropoff_datetime    2025-11-14 18:40:48
+store_and_fwd_flag                         N
+RatecodeID                               4.0
+PULocationID                             130
+DOLocationID                             265
+passenger_count                          2.0
+trip_distance                          88.03
+fare_amount                            610.6
+extra                                    0.0
+mta_tax                                  0.5
+tip_amount                               0.0
+tolls_amount                             0.0
+ehail_fee                                NaN
+improvement_surcharge                    1.0
+total_amount                           612.1
+payment_type                             2.0
+trip_type                                1.0
+congestion_surcharge                     0.0
+cbd_congestion_fee                       0.0
+pickup_day                        2025-11-14
+
+Name: 18867, dtype: object
+
+Q5:
+root@47b437764803:/data# python assignment1_q5.py
+Pickup zone with largest total_amount: East Harlem North
+Total amount: 9281.92
+Zone
+East Harlem North      9281.92
+East Harlem South      6696.13
+Morningside Heights    2100.59
+Forest Hills           1423.75
+Name: total_amount, dtype: float64
+
+Q6:
+root@2e06bd3100ae:/data# python assignment1_q6.py 
+Dropoff zone with largest tip: Upper East Side North
+Total tip amount: 4242.01
+Zone_DO
+Upper East Side North       4242.01
+East Harlem South           3425.94
+Upper West Side North       2752.60
+Yorkville West              2403.17
+Morningside Heights         2121.65
+                             ...   
+Richmond Hill                  0.00
+Van Nest/Morris Park           0.00
+Van Cortlandt Village          0.00
+Williamsbridge/Olinville       0.00
+West Village                   0.00
+Name: tip_amount, Length: 136, dtype: float64
