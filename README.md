@@ -63,3 +63,42 @@ python hw1_q3.py
 python hw1_q4.py
 python hw1_q5.py
 python hw1_q6.py
+
+## 🌍 Terraform Homework – Environment Setup
+
+In this section of the homework, we prepare the environment by creating resources in **Google Cloud Platform (GCP)** using **Terraform**.
+
+---
+
+### 📂 Files
+- `main.tf` → Defines the provider (`hashicorp/google`), a GCS bucket, and a BigQuery dataset.
+- `variables.tf` → Stores project ID, region, location, bucket name, dataset name, and credentials path.
+- `outputs.tf` → Prints the bucket name and dataset ID after apply.
+
+---
+
+### 🛠 Resources Created
+1. **Google Cloud Storage Bucket**
+   - Name: `terraform-test-485109-terra-bucket`
+   - Location: `US`
+   - Storage Class: `STANDARD`
+   - Lifecycle Rule: Delete objects older than 1 day
+   - Force destroy enabled
+
+2. **BigQuery Dataset**
+   - Dataset ID: `demo_dataset_bq`
+   - Location: `US`
+   - Delete contents on destroy enabled
+
+---
+
+### ▶️ Terraform Workflow
+Run the following commands inside the `terrademo` directory:
+
+```bash
+terraform init -upgrade   # Initialize and fetch provider plugins
+terraform plan            # Preview resources to be created
+terraform apply -auto-approve   # Create bucket + dataset
+terraform destroy -auto-approve #destroy bucket and bigQuery dataset
+
+
